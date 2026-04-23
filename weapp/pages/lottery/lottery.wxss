@@ -1,0 +1,183 @@
+/* pages/lottery/lottery.wxss */
+page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.container {
+  padding: 20rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 头部 */
+.header {
+  text-align: center;
+  padding: 30rpx 0;
+}
+
+.title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2rpx 10rpx rgba(0,0,0,0.2);
+}
+
+.desc {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+  margin-top: 10rpx;
+}
+
+/* 转盘区域 */
+.wheel-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40rpx 0;
+}
+
+.pointer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-bottom: 40rpx solid #ff4444;
+  z-index: 10;
+}
+
+.wheel {
+  transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.wheel-canvas {
+  display: block;
+}
+
+/* 抽奖按钮 */
+.lottery-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120rpx;
+  height: 120rpx;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.2);
+  z-index: 5;
+}
+
+.lottery-btn text {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #ff4444;
+}
+
+.lottery-btn.disabled {
+  background: #ccc;
+}
+
+.lottery-btn.disabled text {
+  color: #666;
+}
+
+/* 抽奖次数 */
+.chance-info {
+  text-align: center;
+  padding: 20rpx;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+.chance-info text {
+  margin: 0 10rpx;
+}
+
+/* 底部按钮 */
+.footer {
+  padding: 40rpx 20rpx;
+}
+
+.btn-records {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 2rpx solid rgba(255,255,255,0.5);
+  border-radius: 50rpx;
+  font-size: 28rpx;
+}
+
+/* 结果弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  width: 70%;
+  text-align: center;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.modal-prize {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #ff4444;
+  margin-bottom: 10rpx;
+}
+
+.modal-value {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+}
+
+.modal-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+}

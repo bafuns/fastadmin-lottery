@@ -1,0 +1,52 @@
+<!--pages/lottery/lottery.wxml-->
+<view class="container">
+  <!-- 活动标题 -->
+  <view class="header" wx:if="{{activity}}">
+    <text class="title">{{activity.title}}</text>
+    <text class="desc">{{activity.description}}</text>
+  </view>
+
+  <!-- 转盘区域 -->
+  <view class="wheel-container">
+    <!-- 指针 -->
+    <view class="pointer"></view>
+    
+    <!-- 转盘 -->
+    <view class="wheel" style="transform: rotate({{rotateAngle}}deg)">
+      <canvas canvas-id="wheelCanvas" class="wheel-canvas" style="width: {{canvasWidth}}px; height: {{canvasWidth}}px;"></canvas>
+    </view>
+
+    <!-- 抽奖按钮 -->
+    <view class="lottery-btn" bindtap="startLottery" wx:if="{{!isRolling}}">
+      <text>开始抽奖</text>
+    </view>
+    <view class="lottery-btn disabled" wx:if="{{isRolling}}">
+      <text>抽奖中...</text>
+    </view>
+  </view>
+
+  <!-- 抽奖次数 -->
+  <view class="chance-info">
+    <text>剩余抽奖次数：{{userChance.today_remain}} 次</text>
+    <text wx:if="{{activity.total_chances > 0}}">（共 {{userChance.total_remain}} 次）</text>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer">
+    <button class="btn-records" bindtap="goToRecords">我的奖品</button>
+  </view>
+
+  <!-- 结果弹窗 -->
+  <view class="modal-mask" wx:if="{{result}}" bindtap="closeResult">
+    <view class="modal-content" catchtap="">
+      <view class="modal-icon {{result.type === 4 ? 'thanks' : 'prize'}}">
+        <text wx:if="{{result.type === 4}}">再来</text>
+        <text wx:else>🎉</text>
+      </view>
+      <view class="modal-title">{{result.type === 4 ? '谢谢参与' : '恭喜获得'}}</view>
+      <view class="modal-prize">{{result.name}}</view>
+      <view class="modal-value" wx:if="{{result.value}}">{{result.value}}</view>
+      <button class="modal-btn" bindtap="closeResult">我知道了</button>
+    </view>
+  </view>
+</view>

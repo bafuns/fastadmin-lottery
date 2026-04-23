@@ -1,0 +1,35 @@
+<!--pages/lottery/records/records.wxml-->
+<view class="container">
+  <view class="tabs">
+    <view class="tab {{currentTab==0 ? 'active' : ''}}" data-idx="0" bindtap="switchTab">全部</view>
+    <view class="tab {{currentTab==1 ? 'active' : ''}}" data-idx="1" bindtap="switchTab">待领取</view>
+    <view class="tab {{currentTab==2 ? 'active' : ''}}" data-idx="2" bindtap="switchTab">已领取</view>
+  </view>
+
+  <view class="records-list" wx:if="{{records.length > 0}}">
+    <block wx:for="{{records}}" wx:key="id">
+      <view class="record-item">
+        <view class="record-left">
+          <image class="prize-icon" src="{{item.prize_image || '/assets/default.png'}}" mode="aspectFill"></image>
+        </view>
+        <view class="record-center">
+          <text class="prize-name">{{item.prize_name}}</text>
+          <text class="prize-value">{{item.prize_value}}</text>
+          <text class="record-time">{{item.create_time_text}}</text>
+        </view>
+        <view class="record-right">
+          <text class="status status-{{item.status}}">{{item.status_text}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="empty" wx:if="{{records.length === 0 && !loading}}">
+    <image class="empty-icon" src="/assets/empty.png" mode="widthFix"></image>
+    <text>暂无抽奖记录</text>
+  </view>
+
+  <view class="load-more" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

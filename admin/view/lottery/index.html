@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖管理 - 管理后台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/fastadmin.min.css">
+    <link rel="stylesheet" href="/assets/css/skins/skin-green.css">
+    <link rel="stylesheet" href="/assets/css/fastadmin-layer.css">
+    <style>
+        .lottery-container { padding: 20px; }
+        .panel { margin-bottom: 20px; }
+        .prize-img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        .weight-input { width: 80px; display: inline-block; }
+        .prize-type { padding: 3px 8px; border-radius: 3px; font-size: 12px; }
+        .type-real { background: #d4edda; color: #155724; }
+        .type-points { background: #cce5ff; color: #004085; }
+        .type-coupon { background: #fff3cd; color: #856404; }
+        .type-thanks { background: #e2e3e5; color: #383d41; }
+    </style>
+</head>
+<body class="skin-green sidebar-mini">
+    <div class="wrapper">
+        <!-- 头部 -->
+        <header class="main-header">
+            <a href="/admin/index/index" class="logo">
+                <span class="logo-mini">抽奖</span>
+                <span class="logo-lg">抽奖管理系统</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+            </nav>
+        </header>
+
+        <!-- 左侧菜单 -->
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">功能菜单</li>
+                    <li class="active"><a href="#activity"><i class="fa fa-gift"></i> <span>抽奖活动</span></a></li>
+                    <li><a href="#prize"><i class="fa fa-trophy"></i> <span>奖品管理</span></a></li>
+                    <li><a href="#record"><i class="fa fa-list"></i> <span>抽奖记录</span></a></li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- 主内容 -->
+        <div class="content-wrapper lottery-container">
+            <!-- 抽奖活动 -->
+            <div class="panel panel-default" id="activity">
+                <div class="panel-heading">
+                    <h3 class="panel-title">抽奖活动</h3>
+                    <div class="pull-right">
+                        <button class="btn btn-success btn-xs" onclick="addActivity()">
+                            <i class="fa fa-plus"></i> 新增活动
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover" id="activityTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>活动标题</th>
+                                <th>时间范围</th>
+                                <th>抽奖限制</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityList">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 奖品管理 -->
+            <div class="panel panel-default" id="prize">
+                <div class="panel-heading">
+                    <h3 class="panel-title">奖品管理</h3>
+                    <div class="pull-right">
+                        <select id="prizeActivitySelect" class="form-control" style="width:200px;display:inline-block;" onchange="loadPrizes()">
+                            <option value="">选择活动</option>
+                        </select>
+                        <button class="btn btn-success btn-xs" onclick="addPrize()">
+                            <i class="fa fa-plus"></i> 添加奖品
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>奖品名称</th>
+                                <th>类型</th>
+                                <th>奖品值</th>
+                                <th>权重(‰)</th>
+                                <th>库存</th>
+                                <th>排序</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prizeList">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 抽奖记录 -->
+            <div class="panel panel-default" id="record">
+                <div class="panel-heading">
+                    <h3 class="panel-title">抽奖记录</h3>
+                    <div class="pull-right">
+                        <input type="text" id="searchUser" placeholder="搜索用户ID" class="form-control" style="width:120px;display:inline-block;">
+                        <select id="recordStatus" class="form-control" style="width:100px;display:inline-block;" onchange="loadRecords()">
+                            <option value="">全部</option>
+                            <option value="1">待领取</option>
+                            <option value="2">已领取</option>
+                            <option value="3">已过期</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>用户ID</th>
+                                <th>奖品</th>
+                                <th>类型</th>
+                                <th>IP地址</th>
+                                <th>抽奖时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordList">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <ul class="pagination" id="recordPagination"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/fastadmin.min.js"></script>
+    <script src="/assets/js/fastadmin-layer.js"></script>
+    <script>
+        let currentActivityId = 0;
+        let recordPage = 1;
+
+        // 初始化
+        $(function() {
+            loadActivities();
+            loadActivityOptions();
+            loadRecords();
+        });
+
+        // 加载活动列表
+        function loadActivities() {
+            $.get('/admin/lottery/getActivities', function(res) {
+                if (res.code === 1) {
+                    let html = '';
+                    res.data.forEach(function(item) {
+                        let statusClass = item.is_active == 1 ? 'label-success' : 'label-default';
+                        let statusText = item.is_active == 1 ? '启用' : '禁用';
+                        
+                        let startTime = new Date(item.start_time * 1000).toLocaleString();
+                        let endTime = new Date(item.end_time * 1000).toLocaleString();
+                        
+                        let totalLimit = item.total_chances > 0 ? item.total_chances + '次' : '不限';
+                        let dailyLimit = item.daily_chances > 0 ? item.daily_chances + '次/天' : '不限';
+                        
+                        html += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.title}</td>
+                            <td>${startTime}<br>~ ${endTime}</td>
+                            <td>总计:${totalLimit}<br>每日:${dailyLimit}</td>
+                            <td><span class="label ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <a href="javascript:;" class="btn btn-xs btn-primary" onclick="editActivity(${item.id})">编辑</a>
+                                <a href="javascript:;" class="btn btn-xs btn-${item.is_active == 1 ? 'warning' : 'success'}" onclick="toggleActivity(${item.id}, ${item.is_active == 1 ? 0 : 1})">${item.is_active == 1 ? '禁用' : '启用'}</a>
+                                <a href="javascript:;" class="btn btn-xs btn-danger" onclick="deleteActivity(${item.id})">删除</a>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#activityList').html(html || '<tr><td colspan="6" class="text-center">暂无数据</td></tr>');
+                }
+            });
+        }
+
+        // 加载活动下拉选项
+        function loadActivityOptions() {
+            $.get('/admin/lottery/getActivities', function(res) {
+                if (res.code === 1) {
+                    let html = '<option value="">选择活动</option>';
+                    res.data.forEach(function(item) {
+                        html += `<option value="${item.id}">${item.title}</option>`;
+                    });
+                    $('#prizeActivitySelect').html(html);
+                    if (res.data.length > 0) {
+                        currentActivityId = res.data[0].id;
+                        loadPrizes();
+                    }
+                }
+            });
+        }
+
+        // 加载奖品列表
+        function loadPrizes() {
+            currentActivityId = $('#prizeActivitySelect').val();
+            if (!currentActivityId) {
+                $('#prizeList').html('<tr><td colspan="9" class="text-center">请选择活动</td></tr>');
+                return;
+            }
+            
+            $.get('/admin/lottery/getPrizes', {activity_id: currentActivityId}, function(res) {
+                if (res.code === 1) {
+                    let html = '';
+                    res.data.forEach(function(item) {
+                        let typeClass = ['type-real', 'type-points', 'type-coupon', 'type-thanks'][item.type - 1] || '';
+                        let typeText = ['', '实物', '积分', '优惠券', '谢谢参与'][item.type] || '未知';
+                        let stockText = item.total_stock > 0 ? item.total_stock : '不限';
+                        let statusText = item.is_active == 1 ? '启用' : '禁用';
+                        
+                        html += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td><span class="prize-type ${typeClass}">${typeText}</span></td>
+                            <td>${item.value}</td>
+                            <td>${item.weight}</td>
+                            <td>${stockText}</td>
+                            <td>${item.sort}</td>
+                            <td>${statusText}</td>
+                            <td>
+                                <a href="javascript:;" class="btn btn-xs btn-primary" onclick="editPrize(${item.id})">编辑</a>
+                                <a href="javascript:;" class="btn btn-xs btn-danger" onclick="deletePrize(${item.id})">删除</a>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#prizeList').html(html || '<tr><td colspan="9" class="text-center">暂无奖品</td></tr>');
+                }
+            });
+        }
+
+        // 加载抽奖记录
+        function loadRecords(page) {
+            page = page || 1;
+            recordPage = page;
+            
+            $.get('/admin/lottery/getRecords', {
+                page: page,
+                limit: 20,
+                user_id: $('#searchUser').val(),
+                status: $('#recordStatus').val()
+            }, function(res) {
+                if (res.code === 1) {
+                    let html = '';
+                    res.data.list.forEach(function(item) {
+                        let typeText = ['', '实物', '积分', '优惠券', '谢谢参与'][item.prize_type] || '未知';
+                        let statusText = ['', '待领取', '已领取', '已过期'][item.status] || '未知';
+                        let statusClass = ['', 'warning', 'success', 'default'][item.status] || 'default';
+                        let createTime = new Date(item.create_time * 1000).toLocaleString();
+                        
+                        html += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.user_id}</td>
+                            <td>${item.prize_name}</td>
+                            <td>${typeText}</td>
+                            <td>${item.ip}</td>
+                            <td>${createTime}</td>
+                            <td><span class="label label-${statusClass}">${statusText}</span></td>
+                            <td>
+                                ${item.status == 1 ? `<a href="javascript:;" class="btn btn-xs btn-success" onclick="receivePrize(${item.id})">发放</a>` : ''}
+                            </td>
+                        </tr>`;
+                    });
+                    $('#recordList').html(html || '<tr><td colspan="8" class="text-center">暂无记录</td></tr>');
+                    
+                    // 分页
+                    let pageHtml = '';
+                    let totalPages = Math.ceil(res.data.total / 20);
+                    for (let i = 1; i <= totalPages; i++) {
+                        pageHtml += `<li class="${i == page ? 'active' : ''}"><a href="javascript:loadRecords(${i})">${i}</a></li>`;
+                    }
+                    $('#recordPagination').html(pageHtml);
+                }
+            });
+        }
+
+        // 新增活动
+        function addActivity() {
+            layer.open({
+                type: 2,
+                title: '新增活动',
+                shade: 0.3,
+                area: ['600px', '500px'],
+                content: '/admin/lottery/editActivity'
+            });
+        }
+
+        // 编辑活动
+        function editActivity(id) {
+            layer.open({
+                type: 2,
+                title: '编辑活动',
+                shade: 0.3,
+                area: ['600px', '500px'],
+                content: '/admin/lottery/editActivity?id=' + id
+            });
+        }
+
+        // 切换活动状态
+        function toggleActivity(id, status) {
+            $.post('/admin/lottery/toggleActivity', {id: id, is_active: status}, function(res) {
+                layer.msg(res.msg);
+                if (res.code === 1) loadActivities();
+            });
+        }
+
+        // 删除活动
+        function deleteActivity(id) {
+            layer.confirm('确定删除该活动？', function() {
+                $.post('/admin/lottery/deleteActivity', {id: id}, function(res) {
+                    layer.msg(res.msg);
+                    if (res.code === 1) loadActivities();
+                });
+            });
+        }
+
+        // 新增奖品
+        function addPrize() {
+            if (!currentActivityId) {
+                layer.msg('请先选择活动');
+                return;
+            }
+            layer.open({
+                type: 2,
+                title: '添加奖品',
+                shade: 0.3,
+                area: ['600px', '550px'],
+                content: '/admin/lottery/editPrize?activity_id=' + currentActivityId
+            });
+        }
+
+        // 编辑奖品
+        function editPrize(id) {
+            layer.open({
+                type: 2,
+                title: '编辑奖品',
+                shade: 0.3,
+                area: ['600px', '550px'],
+                content: '/admin/lottery/editPrize?id=' + id
+            });
+        }
+
+        // 删除奖品
+        function deletePrize(id) {
+            layer.confirm('确定删除该奖品？', function() {
+                $.post('/admin/lottery/deletePrize', {id: id}, function(res) {
+                    layer.msg(res.msg);
+                    if (res.code === 1) loadPrizes();
+                });
+            });
+        }
+
+        // 发放奖品
+        function receivePrize(id) {
+            layer.confirm('确认发放该奖品？', function() {
+                $.post('/admin/lottery/receivePrize', {id: id}, function(res) {
+                    layer.msg(res.msg);
+                    if (res.code === 1) loadRecords(recordPage);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

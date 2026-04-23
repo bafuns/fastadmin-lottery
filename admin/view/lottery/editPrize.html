@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo isset($row['id']) && $row['id'] ? '编辑' : '添加'; ?>奖品 - 管理后台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/fastadmin.min.css">
+    <link rel="stylesheet" href="/assets/css/fastadmin-layer.css">
+</head>
+<body class="skin-green">
+    <form id="prizeForm" class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">奖品名称:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" class="form-control" name="row[name]" value="<?php echo isset($row['name']) ? htmlspecialchars($row['name']) : ''; ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">奖品类型:</label>
+            <div class="col-xs-12 col-sm-8">
+                <select class="form-control" name="row[type]" id="prizeType">
+                    <option value="1" <?php echo isset($row['type']) && $row['type'] == 1 ? 'selected' : ''; ?>>实物</option>
+                    <option value="2" <?php echo isset($row['type']) && $row['type'] == 2 ? 'selected' : ''; ?>>积分</option>
+                    <option value="3" <?php echo isset($row['type']) && $row['type'] == 3 ? 'selected' : ''; ?>>优惠券</option>
+                    <option value="4" <?php echo isset($row['type']) && $row['type'] == 4 ? 'selected' : ''; ?>>谢谢参与</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">奖品值:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" class="form-control" name="row[value]" value="<?php echo isset($row['value']) ? htmlspecialchars($row['value']) : ''; ?>" placeholder="如:iPhone 15 Pro / 50 / 优惠券码">
+                <span class="help-block">实物填写名称，积分填写数量，优惠券填写券码</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">奖品图片:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" class="form-control" name="row[image]" value="<?php echo isset($row['image']) ? htmlspecialchars($row['image']) : ''; ?>" placeholder="/assets/lottery/prize.png">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">权重(千分比):</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="number" class="form-control" name="row[weight]" value="<?php echo isset($row['weight']) ? $row['weight'] : 0; ?>" placeholder="1000=100%">
+                <span class="help-block">权重越高中奖概率越大，所有奖品权重之和为1000(千分比)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">总库存:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="number" class="form-control" name="row[total_stock]" value="<?php echo isset($row['total_stock']) ? $row['total_stock'] : 0; ?>" placeholder="0=不限">
+                <span class="help-block">0=不限制库存</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">每日库存:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="number" class="form-control" name="row[daily_stock]" value="<?php echo isset($row['daily_stock']) ? $row['daily_stock'] : 0; ?>" placeholder="0=不限">
+                <span class="help-block">0=不限制每日发放数量</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">排序:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="number" class="form-control" name="row[sort]" value="<?php echo isset($row['sort']) ? $row['sort'] : 0; ?>">
+                <span class="help-block">数字越小越靠前</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">状态:</label>
+            <div class="col-xs-12 col-sm-8">
+                <select class="form-control" name="row[is_active]">
+                    <option value="1" <?php echo isset($row['is_active']) && $row['is_active'] == 1 ? 'selected' : ''; ?>>启用</option>
+                    <option value="0" <?php echo isset($row['is_active']) && $row['is_active'] == 0 ? 'selected' : ''; ?>>禁用</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group layer-footer">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <button type="submit" class="btn btn-success btn-embossed">提交</button>
+                <button type="reset" class="btn btn-default btn-embossed">重置</button>
+            </div>
+        </div>
+    </form>
+
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/fastadmin.min.js"></script>
+    <script src="/assets/js/fastadmin-layer.js"></script>
+    <script>
+        $(function() {
+            $('#prizeForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(res) {
+                        if (res.code === 1) {
+                            parent.layer.msg(res.msg);
+                            parent.location.reload();
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
